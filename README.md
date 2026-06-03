@@ -1,6 +1,6 @@
 # 🚀 Teknosip - DPÜ Teknopark & Öğrenci Kariyer Platformu
 
-> **🌐 Canlı Yayın (Live Demo):** [Teknosip'i Ziyaret Etmek İçin Tıklayın](http://seninsiteninadresi.monsterweb.com.tr)
+> **🌐 Canlı Yayın (Live Demo):** [Teknosip'i Ziyaret Etmek İçin Tıklayın](https://teknosip.runasp.net/)
 
 Teknosip, Dumlupınar Üniversitesi (DPÜ) öğrencileri ile Teknopark bünyesindeki teknoloji firmalarını, kurumları ve akademisyenleri tek bir ekosistemde buluşturan kapsamlı bir kariyer ve proje yönetim platformudur.
 
