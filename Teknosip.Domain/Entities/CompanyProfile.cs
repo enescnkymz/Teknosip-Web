@@ -10,14 +10,17 @@ namespace Teknosip.Domain.Entities
 	{
 
 		public int Id { get; set; }
+		public bool IsApproved { get; set; } 
 		public Guid AppUserId { get; set; }		
 		public string CompanyName { get; set; }
 		public string TaxNumber { get; set; }
-		public string Sector { get; set; }
-		public int FoundedYear { get; set; }
-		public int EmployeeCount { get; set; }
+		public string? Sector { get; set; }
+		public int? FoundedYear { get; set; }
+		public int? EmployeeCount { get; set; }
+		public string? Address { get; set; }
+		public string City { get; set; }
 		public string? Website { get; set; }
-		public string About {  get; set; }
+		public string? About {  get; set; }
 
 		// Navigation		
 		public AppUser AppUser { get; set; }

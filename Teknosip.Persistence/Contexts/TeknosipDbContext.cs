@@ -20,26 +20,26 @@ namespace Teknosip.Persistence.Contexts
 		{
 			base.OnModelCreating(builder);
 
-			
-			builder.Entity<Message>()
-				.HasOne(m => m.Sender) 
-				.WithMany(u => u.SentMessages) 
-				.HasForeignKey(m => m.SenderId) 
-				.OnDelete(DeleteBehavior.Restrict); 
 
-			
 			builder.Entity<Message>()
-				.HasOne(m => m.Receiver) 
-				.WithMany(u => u.ReceivedMessages) 
-				.HasForeignKey(m => m.ReceiverId) 
+				.HasOne(m => m.Sender)
+				.WithMany(u => u.SentMessages)
+				.HasForeignKey(m => m.SenderId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			
+
+			builder.Entity<Message>()
+				.HasOne(m => m.Receiver)
+				.WithMany(u => u.ReceivedMessages)
+				.HasForeignKey(m => m.ReceiverId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+
 			builder.Entity<ProjectApplication>()
 				.HasOne(p => p.Project)
 				.WithMany(p => p.ProjectApplications) 
 				.HasForeignKey(p => p.ProjectId)
-				.OnDelete(DeleteBehavior.Restrict); 
+				.OnDelete(DeleteBehavior.Cascade); 
 
 			
 			builder.Entity<ProjectApplication>()
@@ -51,7 +51,7 @@ namespace Teknosip.Persistence.Contexts
 		}
 
 
-		public DbSet<Category> Categories { get; set; }	
+        public DbSet<Category> Categories { get; set; }	
 		public DbSet<AcademicianProfile> AcademicianProfiles { get; set; }	
 		public DbSet<CompanyProfile> CompanyProfiles { get; set; }	
 		public DbSet<InstitutionProfile> InstitutionProfiles { get; set; }	
@@ -60,6 +60,8 @@ namespace Teknosip.Persistence.Contexts
 		public DbSet<Notification> Notifications { get; set; }	
 		public DbSet<Project> Projects { get; set; }	
 		public DbSet<ProjectApplication> ProjectApplications { get; set; }	
+		public DbSet<ContactMessage> ContactMessages { get; set; }
+		public DbSet<NewsletterSubscription> NewsletterSubscriptions { get; set; }
 
 
 	}

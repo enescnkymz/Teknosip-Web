@@ -1,0 +1,120 @@
+﻿@using Teknosip.Application.Features.Listings.Models
+@model IEnumerable<CompanyListingDto>
+
+@{
+    ViewData["Title"] = "İlanlarım";
+}
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">İlan Yönetimi /</span> İlanlarım
+</h4>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Tüm İlanlarım</h5>
+        <a asp-controller="Listing" asp-action="Create" class="btn btn-primary btn-sm">
+            <i class="bx bx-plus me-1"></i> Yeni İlan Ekle
+        </a>
+    </div>
+
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>İlan Başlığı</th>
+                    <th>İlan Tipi</th>
+                    <th>Kategori</th>
+                    <th class="text-center">Başvuru Sayısı</th>
+                    <th>Tarih</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="bx bx-briefcase fs-3 mb-2"></i><br />
+                            Henüz hiç ilan oluşturmadınız.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><strong>@item.Title</strong></td>
+
+                            <td><span class="badge bg-label-info">@Html.DisplayFor(m => item.ListingType)</span></td>
+                            <td><small class="text-muted">@Html.DisplayFor(m => item.CategoryType)</small></td>
+
+                            <td class="text-center">
+                                @if (item.ApplicationCount > 0)
+                                {
+                                    <span class="badge bg-primary rounded-pill">@item.ApplicationCount Başvuru</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Yok</span>
+                                }
+                            </td>
+
+                            <td>
+                                <small>@item.CreatedAt.ToString("dd MMM yyyy")</small>
+                                @if (item.Deadline.HasValue)
+                                {
+                                    <br /><small class="text-danger" style="font-size: 0.7rem;">Son: @item.Deadline.Value.ToString("dd MMM yyyy")</small>
+                                }
+                            </td>
+
+                            <td>
+                                @if (item.Status)
+                                {
+                                    <span class="badge bg-label-success">Yayında</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-label-secondary">Kapalı</span>
+                                }
+                            </td>
+
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <a asp-area="Company" asp-controller="Applications" asp-action="Index" asp-route-projectId="@item.Id" asp-route-title="@item.Title" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Gelen Başvuruları İncele">
+                                        <i class="bx bx-group me-1"></i> Başvurular
+                                    </a>
+
+                                    <form asp-area="Company" asp-controller="Listing" asp-action="Delete" method="post" class="m-0">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-icon btn-outline-danger btn-sm" data-bs-toggle="tooltip" title="İlanı Sil">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

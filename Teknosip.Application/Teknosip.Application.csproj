@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Teknosip.Domain\Teknosip.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Auth\Queries\" />
+    <Folder Include="Features\Contact\Queries\" />
+    <Folder Include="Features\Newsletter\Queries\" />
+  </ItemGroup>
+
 </Project>

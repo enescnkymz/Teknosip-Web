@@ -1,0 +1,111 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+}
+
+<header id="header" class="header d-flex align-items-center bg-dark">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+        <a asp-controller="Home" asp-action="Index" class="logo d-flex align-items-center me-auto">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+            <!-- <img src="assets/img/logo.webp" alt=""> -->
+            <h1 class="sitename">TEKNOSİP</h1>
+        </a>
+
+       <nav id="navmenu" class="navmenu">
+    <ul>
+        <li>
+            <a asp-controller="Home" asp-action="Index" 
+               class="@(currentController == "Home" && currentAction == "Index" ? "active" : "")">
+               Ana Sayfa
+            </a>
+        </li>
+
+        <li>
+            <a asp-controller="Listings" asp-action="Index"
+               class="@(currentController == "Listings" ? "active" : "")">
+               İlanlar
+            </a>
+        </li>
+
+        <li>
+            <a asp-controller="Companies" asp-action="Index"
+               class="@(currentController == "Companies" ? "active" : "")">
+               Firmalar
+            </a>
+        </li>
+
+        <li>
+            <a asp-controller="Home" asp-action="About" 
+               class="@(currentController == "Home" && currentAction == "About" ? "active" : "")">
+               Hakkımızda
+            </a>
+        </li>
+
+        <li>
+            <a asp-controller="Home" asp-action="Faq" 
+               class="@(currentController == "Home" && currentAction == "Faq" ? "active" : "")">
+               SSS
+            </a>
+        </li>
+
+        <li>
+            <a asp-controller="Academicians" asp-action="Index"
+               class="@(currentController == "Academicians"  ? "active" : "")">
+                Akademisyenler
+            </a>
+        </li>
+
+        <li>
+            <a asp-controller="Institutions" asp-action="Index"
+               class="@(currentController == "Institutions"  ? "active" : "")">
+                Kurumlar
+            </a>
+        </li>
+       
+        <li>
+            <a asp-controller="Contact" asp-action="Index" 
+               class="@(currentController == "Contact" ? "active" : "")">
+               İletişim
+            </a>
+        </li>
+    </ul>
+    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+</nav>
+
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+
+            if (User.IsInRole("Academician"))
+            {
+                <a class="btn-getstarted" asp-area="Academician" asp-controller="Home" asp-action="Index">Akademisyen Paneli</a>
+            }
+            else if (User.IsInRole("Company"))
+            {
+                <a class="btn-getstarted" asp-area="Company" asp-controller="Home" asp-action="Index">Şirket Paneli</a>
+            }
+            else if (User.IsInRole("Student"))
+            {
+                <a class="btn-getstarted" asp-area="Student" asp-controller="Home" asp-action="Index">Öğrenci Paneli</a>
+            }
+            else if (User.IsInRole("Institution"))
+            {
+                <a class="btn-getstarted" asp-area="Institution" asp-controller="Home" asp-action="Index">Kurum Paneli</a>
+            }
+            else if (User.IsInRole("Admin"))
+            {
+                <a class="btn-getstarted" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Paneli</a>
+            }
+            else
+            {
+                <a class="btn-getstarted" href="#">Rol algılanamadı!</a>
+            }
+        }
+        else
+        {
+            // Kullanıcı giriş yapmamış (Ziyaretçi)
+            <a class="btn-getstarted" asp-action="Login" asp-controller="Auth">Giriş Yap</a>
+        }
+
+    </div>
+</header>

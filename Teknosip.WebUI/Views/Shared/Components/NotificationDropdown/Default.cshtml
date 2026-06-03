@@ -1,0 +1,114 @@
+﻿@using Teknosip.WebUI.Services
+@using Teknosip.Domain.Entities
+@using Teknosip.Application.Features.Notifications.Models
+@model NotificationDropdownDto
+
+<style>
+    .notification-msg {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        line-height: 1.4;
+    }
+</style>
+
+<li class="nav-item dropdown">
+    <button class="btn btn-icon rounded-circle btn-icon-sm bg-transparent border-0" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="position-relative d-inline-flex align-items-center justify-content-center">
+            <i class="bx bx-bell fs-4 text-body"></i>
+
+            <span id="unread-badge-main" class="position-absolute badge rounded-pill bg-danger shadow-sm"
+                  style="top: -2px; right: -6px; font-size:.55rem; padding:.2rem .35rem; @(Model.UnreadCount > 0 ? "" : "display:none;")">
+                @Model.UnreadCount
+            </span>
+        </span>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-end p-0 overflow-hidden shadow" style="width:360px; border-radius:12px; border:none; margin-top: 10px;">
+        <div class="d-flex align-items-center justify-content-between px-3 py-3 border-bottom">
+            <h6 class="mb-0 fw-bold d-flex align-items-center gap-2" style="color:#566a7f;">
+                <i class="bx bx-bell text-primary"></i>
+                Bildirimler
+                <span id="unread-badge-header" class="badge rounded-pill"
+                      style="background:rgba(105,108,255,.12); color:#696cff; font-size:.7rem; @(Model.UnreadCount > 0 ? "" : "display:none;")">
+                    @Model.UnreadCount Yeni
+                </span>
+            </h6>
+            <a href="javascript:void(0);" onclick="markAllNotificationsAsRead()" class="text-primary text-decoration-none fw-medium" style="font-size:.75rem;">
+                <i class="bx bx-check-double"></i> Tümünü Okundu İşaretle
+            </a>
+        </div>
+
+        <div style="max-height:320px; overflow-y:auto;">
+
+            @if (Model.Notifications != null && Model.Notifications.Any())
+            {
+                var lastItem = Model.Notifications.Last();
+
+                foreach (var item in Model.Notifications)
+                {
+                    string itemCssClass = item.IsRead ? "bg-white" : "notification-item-unread";
+                    string itemStyle = item.IsRead ? "" : "background:#f5f5ff;";
+
+                    string borderClass = (item == lastItem) ? "" : "border-bottom";
+
+                    string iconClass = "bx bx-bell";
+                    string colorStyle = "background:rgba(105,108,255,.12); color:#696cff;";
+
+                    if (item.Type == NotificationType.Success)
+                    {
+                        iconClass = "bx bx-check-circle";
+                        colorStyle = "background:rgba(113,221,55,.12); color:#71dd37;";
+                    }
+                    else if (item.Type == NotificationType.Warning)
+                    {
+                        iconClass = "bx bx-error";
+                        colorStyle = "background:rgba(255,171,0,.12); color:#ffab00;";
+                    }
+                    else if (item.Type == NotificationType.Message)
+                    {
+                        iconClass = "bx bx-message-rounded-dots";
+                        colorStyle = "background:rgba(3,195,236,.12); color:#03c3ec;";
+                    }
+
+                    <a href="@(string.IsNullOrEmpty(item.RedirectUrl) ? "javascript:void(0);" : item.RedirectUrl)"
+                       class="d-flex align-items-start gap-3 px-3 py-2 text-decoration-none @borderClass @itemCssClass"
+                       style="cursor:pointer; @itemStyle">
+
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:38px; height:38px; @colorStyle font-size:1.1rem;">
+                            <i class="@iconClass"></i>
+                        </div>
+
+                        <div class="flex-grow-1" style="min-width: 0;">
+                            <p class="mb-0 fw-semibold" style="font-size:.82rem; color:#566a7f;">@item.Title</p>
+
+                            <p class="mb-0 notification-msg mt-1" style="font-size:.775rem; color:#a1acb8;">@item.Message</p>
+
+                            <small class="d-block mt-1" style="color:#a1acb8; font-size:.7rem;"><i class="bx bx-time-five"></i> @DateTimeExtensions.ToTimeAgo(item.CreatedAt) </small>
+                        </div>
+
+                        @if (!item.IsRead)
+                        {
+                            <span class="unread-dot rounded-circle flex-shrink-0 mt-1" style="width:7px; height:7px; background:#696cff; display:inline-block;"></span>
+                        }
+                    </a>
+                }
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    <i class="bx bx-bell-off fs-3 mb-2"></i>
+                    <p class="mb-0" style="font-size: .85rem;">Şu an için yeni bir bildiriminiz yok.</p>
+                </div>
+            }
+
+        </div>
+
+        <a asp-area="" asp-controller="Notification" asp-action="Index" class="dropdown-item text-center py-3 border-top text-primary fw-semibold" style="font-size:.8rem;">
+            Tüm Bildirimleri Gör <i class="bx bx-right-arrow-alt align-middle"></i>
+        </a>
+    </div>
+</li>

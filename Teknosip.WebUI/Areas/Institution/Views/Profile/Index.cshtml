@@ -1,0 +1,135 @@
+﻿@using Teknosip.WebUI.Areas.Institution.Models
+@model InstitutionProfileEditVM
+
+@{
+    ViewData["Title"] = "Profil";
+    Layout = "~/Areas/Institution/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Hesap Ayarları /</span> Kurum Profili</h4>
+
+<div class="row">
+    <div class="col-md-12">
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bx bx-check-circle me-1"></i>
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="card mb-4">
+            <h5 class="card-header">Kurum Profil Detayları</h5>
+
+            <form asp-area="Institution" asp-controller="Profile" asp-action="Index" method="POST" enctype="multipart/form-data">
+
+                <div class="card-body pb-0">
+                    <div asp-validation-summary="ModelOnly" class="text-danger fw-bold"></div>
+                </div>
+
+                <div class="card-body">
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                        <img src="@(Model.CurrentPhotoUrl ?? "/images/profiles/default.webp")"
+                             alt="institution-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" style="object-fit:cover;" />
+                        <div class="button-wrapper">
+                            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                <span class="d-none d-sm-block">Yeni Logo/Fotoğraf Yükle</span>
+                                <i class="bx bx-upload d-block d-sm-none"></i>
+                                <input asp-for="NewProfilePhoto" type="file" id="upload" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                            </label>
+                            <p class="text-muted mb-0">İzin verilen formatlar: JPG, PNG. Maksimum boyut 2MB</p>
+                            <span asp-validation-for="NewProfilePhoto" class="text-danger d-block mt-1"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-0" />
+
+                <div class="card-body">
+                    <div class="row">
+                        <input type="hidden" asp-for="CurrentPhotoUrl" />
+
+                        <div class="mb-3 col-md-6">
+                            <label asp-for="InstitutionName" class="form-label">Kurum Adı</label>
+                            <input asp-for="InstitutionName" class="form-control" type="text" placeholder="Örn: X Bakanlığı / Y Vakfı" required />
+                            <span asp-validation-for="InstitutionName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label asp-for="Email" class="form-label">Kurumsal E-Posta Adresi</label>
+                            <input asp-for="Email" class="form-control" type="email" placeholder="ornek@kurum.gov.tr" readonly />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label">Telefon Numarası</label>
+                            <div class="input-group">
+                                <span class="input-group-text text-muted">+90</span>
+                                <input asp-for="PhoneNumber" class="form-control" type="text" placeholder="555 555 55 55" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label asp-for="City" class="form-label">Şehir</label>
+                            <input asp-for="City" class="form-control city-dropdown" type="text" placeholder="Ankara" required />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label asp-for="Website" class="form-label">Web Sitesi</label>
+                            <input asp-for="Website" class="form-control" type="url" placeholder="https://www.kurum.gov.tr" />
+                            <span asp-validation-for="Website" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 col-md-12">
+                            <label asp-for="About" class="form-label">Kurum Hakkında</label>
+                            <textarea asp-for="About" class="form-control" rows="4" placeholder="Kurumun misyonu, faaliyet alanları..."></textarea>
+                            <span asp-validation-for="About" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+                    <h5 class="card-title mb-3 text-primary">Şifre Değiştirme <small class="text-muted fs-6">(İsteğe Bağlı)</small></h5>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label asp-for="CurrentPassword" class="form-label">Mevcut Şifre</label>
+                            <input asp-for="CurrentPassword" class="form-control" type="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                            <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label asp-for="NewPassword" class="form-label">Yeni Şifre</label>
+                            <input asp-for="NewPassword" class="form-control" type="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label asp-for="ConfirmNewPassword" class="form-label">Yeni Şifre (Tekrar)</label>
+                            <input asp-for="ConfirmNewPassword" class="form-control" type="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                            <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary me-2">Değişiklikleri Kaydet</button>
+                        <button type="reset" class="btn btn-outline-secondary">Vazgeç</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('upload').addEventListener('change', function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('uploadedAvatar');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
+}

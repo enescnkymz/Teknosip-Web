@@ -1,0 +1,69 @@
+﻿@using Teknosip.Application.Features.AcademicianProfile.Models
+@model IEnumerable<PublicAcademicianDto>
+
+@{
+    ViewData["Title"] = "Akademisyenlerimiz";
+}
+
+
+
+<section id="header" class="section pb-0">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Değerli Akademisyenlerimiz</h2>
+        <p>Platformumuzda yer alan, projelerinize ve kariyerinize rehberlik edecek onaylı akademik kadromuz.</p>
+    </div>
+</section>
+
+
+
+
+<section id="team" class="team section py-5">
+    <div class="container" data-aos="fade-up">
+       
+
+        <div class="row gy-4">
+            @if (!Model.Any())
+            {
+                <div class="col-12 text-center py-5">
+                    <h5 class="text-muted">Şu an sistemde onaylı bir akademisyen bulunmamaktadır.</h5>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="100">
+                       
+                        <div class="team-member d-flex align-items-start rounded-4 shadow-sm bg-white p-4 h-100 position-relative" style="border: 1px solid rgba(71, 178, 228, 0.1); transition: 0.3s;">
+
+                            <div class="pic flex-shrink-0 me-4">
+                                <img src="@(item.ProfilePhoto ?? "/images/profiles/default.webp")" class="img-fluid rounded-circle border shadow-sm p-1" style="width: 120px; height: 120px; object-fit: cover;" alt="@item.FullName">
+                            </div>
+
+                            <div class="member-info flex-grow-1">
+
+                               
+                                <h4 class="fw-bold mb-1" style="font-size: 1.25rem;">
+                                    <a asp-controller="Academicians" asp-action="Details" asp-route-id="@item.AppUserId" class="text-decoration-none stretched-link" style="color: #37517e;">
+                                        @item.Title @item.FullName
+                                    </a>
+                                </h4>
+
+                                
+                                <span class="mb-2 text-muted fw-medium" style="font-size: 0.9rem;">
+                                    <i class="bi bi-book me-1 text-primary"></i> @item.Department
+                                </span>
+
+                                <p class="text-muted small m-0" style="line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                    @(string.IsNullOrEmpty(item.About) ? "Bu akademisyen henüz hakkında bilgisi girmemiştir." : item.About)
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>

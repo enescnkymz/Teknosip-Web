@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "İletişim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Contact Section -->
+
+<section id="contact" class="contact section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>İLETİŞİM</h2>
+        <p>Herhangi bir sorunuz için bizimle iletişime geçebilirsiniz.</p>
+
+        <div class="col-md-12 mt-4">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success text-center shadow-sm">
+                    @TempData["Message"]
+                </div>
+            }
+        </div>
+
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+            <div class="col-lg-5">
+
+                <div class="info-wrap">
+                    <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+                        <i class="bi bi-geo-alt flex-shrink-0"></i>
+                        <div>
+                            <h3>Adres</h3>
+                            <p>Çalca OSB, 43100 Kütahya Merkez/Kütahya</p>
+                        </div>
+                    </div><!-- End Info Item -->
+
+                    <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+                        <i class="bi bi-telephone flex-shrink-0"></i>
+                        <div>
+                            <h3>Telefon</h3>
+                            <p>+90 543 929 75 42</p>
+                        </div>
+                    </div><!-- End Info Item -->
+
+                    <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+                        <i class="bi bi-envelope flex-shrink-0"></i>
+                        <div>
+                            <h3>Mail</h3>
+                            <p>teknosip@gmail.com</p>
+                        </div>
+                    </div><!-- End Info Item -->
+                    
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.8527318464007!2d30.02565131194361!3d39.4726555714885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c94fc7684060f9%3A0x1a6c56134296d665!2sK%C3%BCtahya%20Tasar%C4%B1m%20Teknokent!5e0!3m2!1str!2str!4v1775042035746!5m2!1str!2str" frameborder="0" style="border:0; width: 100%; height: 270px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <form asp-controller="Contact" asp-action="Index" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+                    <div class="row gy-4">
+
+                        <div class="col-md-6">
+                            <label for="name-field" class="pb-2">Ad Soyad</label>
+                            <input type="text" name="name" id="name-field" class="form-control" required="">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email-field" class="pb-2">Email</label>
+                            <input type="email" class="form-control" name="email" id="email-field" required="">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="subject-field" class="pb-2">Başlık</label>
+                            <input type="text" class="form-control" name="subject" id="subject-field" required="">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="message-field" class="pb-2">Mesaj</label>
+                            <textarea class="form-control" name="message" rows="10" id="message-field" required=""></textarea>
+                        </div>
+
+                        
+
+                        <div class="col-md-12 text-center">
+                            <button type="submit">Mesajı Gönder</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+    <!-- End Contact Form -->
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- /Contact Section -->

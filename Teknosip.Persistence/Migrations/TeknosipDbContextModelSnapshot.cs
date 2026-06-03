@@ -134,7 +134,6 @@ namespace Teknosip.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("About")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("AppUserId")
@@ -143,6 +142,13 @@ namespace Teknosip.Persistence.Migrations
                     b.Property<string>("Department")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -212,11 +218,7 @@ namespace Teknosip.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastMessageReadAt")
                         .HasColumnType("datetime2");
@@ -302,24 +304,32 @@ namespace Teknosip.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("About")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EmployeeCount")
+                    b.Property<int?>("EmployeeCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("FoundedYear")
+                    b.Property<int?>("FoundedYear")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Sector")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TaxNumber")
@@ -337,6 +347,38 @@ namespace Teknosip.Persistence.Migrations
                     b.ToTable("CompanyProfiles");
                 });
 
+            modelBuilder.Entity("Teknosip.Domain.Entities.ContactMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SendDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactMessages");
+                });
+
             modelBuilder.Entity("Teknosip.Domain.Entities.InstitutionProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -346,19 +388,21 @@ namespace Teknosip.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("About")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("InstitutionName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Website")
                         .HasColumnType("nvarchar(max)");
@@ -373,9 +417,11 @@ namespace Teknosip.Persistence.Migrations
 
             modelBuilder.Entity("Teknosip.Domain.Entities.Message", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -405,6 +451,26 @@ namespace Teknosip.Persistence.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("Teknosip.Domain.Entities.NewsletterSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubscriptionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsletterSubscriptions");
+                });
+
             modelBuilder.Entity("Teknosip.Domain.Entities.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -416,8 +482,8 @@ namespace Teknosip.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -425,6 +491,16 @@ namespace Teknosip.Persistence.Migrations
 
                     b.Property<string>("RedirectUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -439,7 +515,7 @@ namespace Teknosip.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CategoryType")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -456,8 +532,14 @@ namespace Teknosip.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ListingType")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("PublishedById")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("SalaryOrBudget")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -473,8 +555,6 @@ namespace Teknosip.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("PublishedById");
 
@@ -494,6 +574,9 @@ namespace Teknosip.Persistence.Migrations
 
                     b.Property<DateTime>("AppliedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CoverLetter")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
@@ -525,13 +608,16 @@ namespace Teknosip.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("About")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -659,19 +745,11 @@ namespace Teknosip.Persistence.Migrations
 
             modelBuilder.Entity("Teknosip.Domain.Entities.Project", b =>
                 {
-                    b.HasOne("Teknosip.Domain.Entities.Category", "Category")
-                        .WithMany("Project")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Teknosip.Domain.Entities.AppUser", "PublishedBy")
                         .WithMany()
                         .HasForeignKey("PublishedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
 
                     b.Navigation("PublishedBy");
                 });
@@ -687,7 +765,7 @@ namespace Teknosip.Persistence.Migrations
                     b.HasOne("Teknosip.Domain.Entities.Project", "Project")
                         .WithMany("ProjectApplications")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
@@ -721,11 +799,6 @@ namespace Teknosip.Persistence.Migrations
                     b.Navigation("SentMessages");
 
                     b.Navigation("StudentProfile");
-                });
-
-            modelBuilder.Entity("Teknosip.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Teknosip.Domain.Entities.Project", b =>

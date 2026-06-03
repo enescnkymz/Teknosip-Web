@@ -1,0 +1,113 @@
+﻿@using Teknosip.Application.Features.InstitutionProfile.Models
+@model PublicInstitutionDetailDto
+
+@{
+    ViewData["Title"] = $"{Model.InstitutionName} - Profil";
+}
+
+<style>
+    .company-header-bg {
+        background-color: #f3f5fa;
+        padding: 40px 0;
+        border-bottom: 1px solid #e1e6f1;
+    }
+</style>
+
+<section class="company-header-bg">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-1" style="color: #37517e;">@Model.InstitutionName</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item"><a href="/Institutions" class="text-decoration-none">Kurumlar</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Detay</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="section py-5">
+    <div class="container">
+        <div class="row gy-5">
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
+                    <div class="mb-4">
+                        <img src="@(Model.ProfilePhoto ?? "/images/profiles/default-company.webp")"
+                             class="rounded-circle border shadow-sm mx-auto p-2"
+                             style="width: 140px; height: 140px; object-fit: contain; background-color: #fff;"
+                             alt="@Model.InstitutionName" />
+                    </div>
+
+                    <h4 class="fw-bold mb-1" style="color: #37517e;">@Model.InstitutionName</h4>
+                    <p class="text-muted small mb-4">
+                        <i class="bi bi-geo-alt-fill text-primary me-1"></i> @Model.City
+                    </p>
+
+                    <hr class="mb-4 opacity-25" />
+
+                    <ul class="list-group list-group-flush text-start small">
+                        <li class="list-group-item px-0 border-0 mb-3">
+                            <span class="text-muted d-block fw-semibold mb-1">Kurumsal E-Posta</span>
+                            <a href="mailto:@Model.Email" class="text-decoration-none" style="color: #47b2e4;">
+                                <i class="bi bi-envelope-fill me-2"></i>@Model.Email
+                            </a>
+                        </li>
+
+                        @if (!string.IsNullOrEmpty(Model.Website))
+                        {
+                            <li class="list-group-item px-0 border-0 mb-3">
+                                <span class="text-muted d-block fw-semibold mb-1">Web Sitesi</span>
+                                <a href="@(Model.Website.StartsWith("http") ? Model.Website : $"https://{Model.Website}")"
+                                   target="_blank" class="text-decoration-none text-dark">
+                                    <i class="bi bi-globe text-primary me-2"></i>@Model.Website.Replace("https://", "").Replace("http://", "")
+                                </a>
+                            </li>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <li class="list-group-item px-0 border-0 mb-3">
+                                <span class="text-muted d-block fw-semibold mb-1">Telefon</span>
+                                <span class="text-dark">
+                                    <i class="bi bi-telephone-fill text-primary me-2"></i>@Model.PhoneNumber
+                                </span>
+                            </li>
+                        }
+
+                        <li class="list-group-item px-0 border-0">
+                            <span class="text-muted d-block fw-semibold mb-1">Sisteme Katılım</span>
+                            <span class="text-dark">
+                                <i class="bi bi-calendar-check-fill text-primary me-2"></i>@Model.JoinedAt.ToString("MMMM yyyy")
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 p-5 h-100">
+                    <h5 class="fw-bold mb-4 pb-2" style="color: #37517e; border-bottom: 2px solid #f3f5fa;">
+                        <i class="bi bi-info-circle-fill me-2 text-primary"></i> Kurum Hakkında
+                    </h5>
+
+                    <div class="text-muted" style="line-height: 1.8; white-space: pre-wrap;">
+                        @if (!string.IsNullOrEmpty(Model.About))
+                        {
+                            @Model.About
+                        }
+                        else
+                        {
+                            <span class="fst-italic">Bu kurum henüz hakkında bilgisi veya tanıtım yazısı eklememiştir.</span>
+                        }
+                    </div>
+
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

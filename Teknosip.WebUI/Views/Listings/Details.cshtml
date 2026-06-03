@@ -1,0 +1,263 @@
+﻿@using Teknosip.Application.Features.Listings.Models
+@model PublicListingDetailDto
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+
+<style>
+
+    .logo-hover {
+        transition: transform 0.3s ease;
+    }
+
+        .logo-hover:hover {
+            transform: scale(1.05);
+        }
+
+
+    .company-header-bg {
+        background-color: #f3f5fa;
+        padding: 40px 0;
+        border-bottom: 1px solid #e1e6f1;
+    }
+</style>
+
+
+<section class="company-header-bg">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-1" style="color: #37517e;">@Model.Title</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item"><a href="/Listings" class="text-decoration-none">İlanlar</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Detay</li>
+                </ol>
+            </nav>
+        </div>
+
+    </div>
+</section>
+
+<section class="section py-5">
+    <div class="container">
+        <div class="row gy-5">
+
+            <div class="col-lg-8">
+                <img src="@(Model.Image ?? "/images/default-company.webp")" class="img-fluid rounded-4 shadow-sm w-100 mb-4" style="max-height: 400px; object-fit: cover;" alt="Afiş" />
+
+                <h3 class="fw-bold mb-3" style="color: #37517e;">@Model.Title</h3>
+
+                <div class="d-flex gap-2 mb-4">
+                    <span class="badge bg-primary px-3 py-2 rounded-pill">@Html.DisplayFor(m => Model.ListingType)</span>
+                    <span class="badge bg-secondary px-3 py-2 rounded-pill">@Html.DisplayFor(m => Model.CategoryType)</span>
+                </div>
+
+                <h5 class="fw-bold mt-4" style="color: #37517e; border-bottom: 2px solid #f3f5fa; padding-bottom: 10px;">İlan Açıklaması</h5>
+                <div class="text-muted" style="line-height: 1.8; white-space: pre-wrap;">@Model.Description</div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px;">
+
+                    <div class="text-center mb-4">
+                        <a asp-controller="Companies" asp-action="Details" asp-route-id="@Model.PublishedById" class="text-decoration-none" title="Firma Profilini İncele">
+                            <img src="@(Model.PublisherLogo ?? "/images/profiles/default-company.webp")"
+                                 class="rounded-circle border shadow-sm mb-3 p-1 logo-hover"
+                                 style="width: 100px; height: 100px; object-fit: cover;" />
+
+                            <h5 class="fw-bold mb-1" style="color: #37517e; transition: color 0.3s;" onmouseover="this.style.color='#47b2e4'" onmouseout="this.style.color='#37517e'">
+                                @Model.PublisherName
+                            </h5>
+                        </a>
+
+                        @if (!string.IsNullOrEmpty(Model.City))
+                        {
+                            <p class="text-muted small mt-2"><i class="bi bi-geo-alt-fill"></i> @Model.City</p>
+                        }
+                    </div>
+
+                    <ul class="list-group list-group-flush mb-4 small">
+                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            <span class="text-muted"><i class="bi bi-calendar-check me-2"></i> Yayınlanma</span>
+                            <span class="fw-medium">@Model.CreatedAt.ToString("dd MMM yyyy")</span>
+                        </li>
+
+                        @if (Model.Deadline.HasValue)
+                        {
+                            <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                <span class="text-muted"><i class="bi bi-clock-history me-2"></i> Son Başvuru</span>
+                                <span class="fw-bold text-danger">@Model.Deadline.Value.ToString("dd MMM yyyy")</span>
+                            </li>
+                        }
+
+                        @if (Model.WorkType.HasValue)
+                        {
+                            <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                <span class="text-muted"><i class="bi bi-briefcase me-2"></i> Çalışma Şekli</span>
+                                <span class="fw-medium">@Html.DisplayFor(m => Model.WorkType)</span>
+                            </li>
+                        }
+
+                        @if (Model.SalaryOrBudget.HasValue)
+                        {
+                            <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                <span class="text-muted"><i class="bi bi-wallet2 me-2"></i> Bütçe/Maaş</span>
+                                <span class="fw-medium">@Model.SalaryOrBudget.Value.ToString("N2") ₺</span>
+                            </li>
+                        }
+                    </ul>
+
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <button type="button" onclick="showLoginWarning()" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm" style="background-color: #47b2e4; border: none;">
+                            <i class="bi bi-send-fill me-1"></i> Hemen Başvur
+                        </button>
+                    }
+                    else if (!User.IsInRole("Student"))
+                    {
+                        <button type="button" onclick="showRoleWarning()" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm" style="background-color: #47b2e4; border: none;">
+                            <i class="bi bi-send-fill me-1"></i> Hemen Başvur
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#applyModal" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm" style="background-color: #47b2e4; border: none;">
+                            <i class="bi bi-send-fill me-1"></i> Hemen Başvur
+                        </button>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
+{
+    <div class="modal fade" id="applyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(55, 81, 126, 0.15);">
+
+                <div class="modal-header border-0 px-4 pt-4 pb-2">
+                    <h5 class="fw-bold mb-0" style="color: #37517e;">Başvurunu Tamamla</h5>
+                    <button type="button" class="btn-close text-muted" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body px-4 py-3">
+                    <p class="text-muted small mb-4">Firmaya iletilmek üzere kısa bir ön yazı ekleyebilirsiniz. Bu alan zorunlu olmasa da öne çıkmanızı sağlar.</p>
+
+                    <form id="applyForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="ProjectId" value="@Model.Id" />
+
+                        <div class="form-floating mb-2">
+                            <textarea class="form-control shadow-none"
+                                      placeholder="Ön yazınızı buraya yazın..."
+                                      id="CoverLetter"
+                                      name="CoverLetter"
+                                      style="height: 160px; border-radius: 12px; background-color: #f8f9fa; border: 1px solid #e1e6f1; resize: none;"></textarea>                        
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer border-0 px-4 pb-4 pt-0 d-flex justify-content-between align-items-center">
+                    <button type="button" class="btn text-muted fw-medium px-2" data-bs-dismiss="modal" style="background: transparent; border: none;">Vazgeç</button>
+
+                    <button type="button" id="btnSubmitApply" class="btn btn-primary px-4 py-2 shadow-sm" style="background-color: #47b2e4; border: none; border-radius: 50px; font-weight: 500;">
+                        Başvuruyu Gönder <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function showLoginWarning() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Giriş Yapmanız Gerekiyor',
+                text: 'İlanlara başvurabilmek için sisteme üye olmalı veya giriş yapmalısınız.',
+                confirmButtonText: 'Giriş Yap / Kayıt Ol',
+                confirmButtonColor: '#47b2e4',
+                showCancelButton: true,
+                cancelButtonText: 'Kapat'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Auth/Login';
+                }
+            });
+        }
+
+        function showRoleWarning() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Yetkisiz İşlem',
+                text: 'Sistemdeki ilanlara yalnızca "Öğrenci" hesapları başvuru yapabilir.',
+                confirmButtonText: 'Anladım',
+                confirmButtonColor: '#37517e'
+            });
+        }
+
+        // AJAX ile Başvuru Gönderme İşlemi
+        $(document).ready(function () {
+            $("#btnSubmitApply").click(function () {
+                var btn = $(this);
+                var form = $("#applyForm");
+
+                // Butonu deaktif yapıp yükleniyor efekti ver
+                btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Gönderiliyor...');
+
+                $.ajax({
+                    url: '/Listings/Apply',
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            // Modal'ı Kapat
+                            $('#applyModal').modal('hide');
+
+                            // Başarı Mesajı
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Harika!',
+                                text: response.message,
+                                confirmButtonText: 'Tamam',
+                                confirmButtonColor: '#47b2e4'
+                            });
+                            btn.prop("disabled", false).html('Gönder <i class="bi bi-rocket-takeoff ms-1"></i>');
+                        } else {
+                            // Zaten başvurmuşsa vs. Hata Mesajı
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Bilgi',
+                                text: response.message,
+                                confirmButtonText: 'Tamam',
+                                confirmButtonColor: '#37517e'
+                            });
+                            btn.prop("disabled", false).html('Gönder <i class="bi bi-rocket-takeoff ms-1"></i>');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata!',
+                            text: 'Başvuru sırasında sunucu ile bağlantı kurulamadı.',
+                            confirmButtonColor: '#37517e'
+                        });
+                        btn.prop("disabled", false).html('Gönder <i class="bi bi-rocket-takeoff ms-1"></i>');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\Arsha\**" />
+    <Content Remove="wwwroot\Arsha\**" />
+    <EmbeddedResource Remove="wwwroot\Arsha\**" />
+    <None Remove="wwwroot\Arsha\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.24">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,15 +23,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Teknosip.Application\Teknosip.Application.csproj" />
+    <ProjectReference Include="..\Teknosip.Infrastructure\Teknosip.Infrastructure.csproj" />
     <ProjectReference Include="..\Teknosip.Persistence\Teknosip.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Academician\Data\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\" />
-    <Folder Include="ViewComponents\" />
+    <Folder Include="Areas\Company\Data\" />
+    <Folder Include="Areas\Institution\Data\" />
+    <Folder Include="Areas\Student\Data\" />
   </ItemGroup>
 
 </Project>

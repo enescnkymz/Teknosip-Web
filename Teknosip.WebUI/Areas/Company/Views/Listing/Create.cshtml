@@ -1,0 +1,112 @@
+﻿@using Teknosip.Domain.Entities
+@model Teknosip.WebUI.Areas.Company.Models.CreateListingVM
+
+@{
+    ViewData["Title"] = "Yeni İlan Oluştur";
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">İlan Yönetimi /</span> Yeni İlan Ekle</h4>
+
+<div class="row">
+    <div class="col-xl-8 col-lg-10 mx-auto">
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom pb-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="bx bx-briefcase me-2"></i>İlan Detayları</h5>
+            </div>
+
+            <div class="card-body pt-4">
+                <form asp-area="Company" asp-controller="Listing" asp-action="Create" method="POST" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-bold"></div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="Title" class="form-label fw-semibold">İlan Başlığı</label>
+                            <input asp-for="Title" class="form-control" placeholder="Örn: Kıdemli Yazılım Geliştirici, Yaz Stajyeri, E-Ticaret Projesi..." />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="ListingType" class="form-label fw-semibold">İlan Tipi</label>
+                            <select asp-for="ListingType" asp-items="Html.GetEnumSelectList<ListingType>()" class="form-select">
+                                <option value="">Lütfen Seçiniz</option>
+                            </select>
+                            <span asp-validation-for="ListingType" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="WorkType" class="form-label fw-semibold">Çalışma Şekli (Opsiyonel)</label>
+                            <select asp-for="WorkType" asp-items="Html.GetEnumSelectList<WorkType>()" class="form-select">
+                                <option value="">Belirtilmemiş</option>
+                            </select>
+                            <span asp-validation-for="WorkType" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="CategoryType" class="form-label fw-semibold">Kategori</label>
+                            <select asp-for="CategoryType" asp-items="Html.GetEnumSelectList<CategoryType>()" class="form-select">
+                                <option value="">Kategori Seçin</option>
+                            </select>
+                            <span asp-validation-for="CategoryType" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="SalaryOrBudget" class="form-label fw-semibold">Maaş / Proje Bütçesi (Opsiyonel)</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text">₺</span>
+                                <input asp-for="SalaryOrBudget" type="number" step="0.01" class="form-control" placeholder="15000" />
+                            </div>
+                            <span asp-validation-for="SalaryOrBudget" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="Deadline" class="form-label fw-semibold">Son Başvuru Tarihi (Opsiyonel)</label>
+                            <input asp-for="Deadline" type="date" class="form-control" />
+                            <span asp-validation-for="Deadline" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label fw-semibold">İlan Açıklaması & Gereksinimler</label>
+                            <textarea asp-for="Description" class="form-control" rows="6" placeholder="Adaylardan beklentileriniz, projenin detayları..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <label class="form-label fw-semibold">İlan Görseli / Afiş</label>
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="/images/profiles/default-company.webp" id="imagePreview" class="rounded border shadow-sm" style="width: 120px; height: 80px; object-fit: cover;" alt="Önizleme" />
+                                <div>
+                                    <input asp-for="ImageFile" type="file" id="imageInput" class="form-control" accept="image/png, image/jpeg, image/webp" />
+                                    <small class="text-muted d-block mt-1">Sadece JPG, PNG veya WEBP. İlanınızın dikkat çekmesi için yatay bir görsel seçin.</small>
+                                </div>
+                            </div>
+                            <span asp-validation-for="ImageFile" class="text-danger small d-block mt-1"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="/Company/Home" class="btn btn-outline-secondary">İptal</a>
+                        <button type="submit" class="btn btn-primary px-4 shadow-sm"><i class="bx bx-send me-1"></i> İlanı Yayınla</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+            }
+            if(event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });</script>
+
+}

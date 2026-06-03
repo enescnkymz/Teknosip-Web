@@ -33,6 +33,7 @@ namespace Teknosip.Persistence.Repositories
 			return kategoriler.ToList();
 		}
 
+
 	
 	}
 }

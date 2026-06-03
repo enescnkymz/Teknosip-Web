@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "Giriş";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section id="login" class="d-flex align-items-center section-bg" style="min-height: 80vh; background-color: #f3f5fa;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-8" data-aos="zoom-in">
+                <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5">
+
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold" style="color: #37517e;">Giriş Yap</h2>
+                        <p class="text-muted">Teknosip hesabınıza erişin</p>
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-medium text-secondary">E-posta Adresi</label>
+                            <input type="email" name="Email" class="form-control" required placeholder="ornek@mail.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-medium text-secondary">Şifre</label>
+                            <input type="password" name="Password" class="form-control" required placeholder="••••••••">
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="RememberMe" value="true" id="RememberMe">
+                                <label class="form-check-label text-secondary" for="RememberMe" style="font-size: 0.9rem;">
+                                    Beni Hatırla
+                                </label>
+                            </div>
+                            <a href="#" class="text-decoration-none fw-medium" style="color: #47b2e4; font-size: 0.9rem;">Şifremi Unuttum?</a>
+                        </div>
+
+                        <div id="loginMessage" class="alert text-center fw-medium" style="display:none; font-size: 0.9rem;"></div>
+
+                        <div class="d-grid gap-2 mt-2">
+                            <button type="submit" class="btn text-white rounded-pill py-2 fw-medium" style="background-color: #47b2e4;">
+                                Giriş Yap
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <p class="text-secondary mb-0" style="font-size: 0.95rem;">
+                                Hesabınız yok mu?
+                                <a href="/Auth/Register" class="fw-bold text-decoration-none" style="color: #37517e;">Kayıt Ol</a>
+                            </p>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{ 
+ <script>
+     $(document).ready(function () {
+         $("#loginForm").submit(function (e) {
+             e.preventDefault(); 
+
+             var messageBox = $("#loginMessage");
+             var formData = $(this).serialize();
+             var submitButton = $(this).find('button[type="submit"]');
+
+             // Butonu "Giriş yapılıyor..." durumuna alıp kilitle (UX için harikadır)
+             submitButton.prop('disabled', true).text('Giriş Yapılıyor...');
+             messageBox.hide();
+
+             $.ajax({
+                 type: "POST",
+                 url: "/Auth/Login", // Controller adını ve yolunu ayarlayacağız
+                 data: formData,
+                 success: function (response) {
+                     messageBox.show();
+
+                     if (response.success) {
+                         messageBox.removeClass("alert-danger").addClass("alert-success");
+                         messageBox.text(response.message);
+
+                         // Giriş başarılıysa 1.5 saniye sonra ana sayfaya (veya dashboard'a) yönlendir
+                         setTimeout(function () {
+                             window.location.href = response.redirectUrl;
+                         }, 1500);
+                     } else {
+                         messageBox.removeClass("alert-success").addClass("alert-danger");
+                         messageBox.text(response.message);
+                         submitButton.prop('disabled', false).text('Giriş Yap'); 
+                     }
+                 },
+                 error: function () {
+                     messageBox.show().removeClass("alert-success").addClass("alert-danger");
+                     messageBox.text("Sunucu ile iletişim kurulamadı. Lütfen tekrar deneyin.");
+                     submitButton.prop('disabled', false).text('Giriş Yap');
+                 }
+             });
+         });
+     });
+ </script>
+}

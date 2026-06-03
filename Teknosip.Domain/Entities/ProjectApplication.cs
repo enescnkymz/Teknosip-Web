@@ -17,6 +17,7 @@ namespace Teknosip.Domain.Entities
 		public int Id { get; set; }
 		public int ProjectId { get; set; }
 		public Guid AppUserId { get; set; }
+		public string? CoverLetter { get; set; }
 		public ApplicationStatus Status { get; set; }    // Pending, Accepted, Rejected
 		public string? RejectionReason { get; set; }     // Ret sebebi (opsiyonel)
 		public DateTime AppliedAt { get; set; } = DateTime.UtcNow;

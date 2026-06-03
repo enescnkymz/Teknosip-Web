@@ -1,0 +1,464 @@
+﻿
+@{
+    ViewData["Title"] = "Kayıt Ol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="register-section" style="background-color: #f3f5fa;" class="inner-page pt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8" data-aos="fade-up">
+
+                <div class="card shadow border-0 rounded-4 mt-5">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="section-title pb-4 text-center">
+                            <h2>Aramıza Katılın</h2>
+                            <p>TEKNOSİP ekosisteminde yerinizi almak için size uygun rolü seçerek kayıt olabilirsiniz.</p>
+                        </div>
+
+                        <ul class="nav nav-pills nav-justified flex-column flex-sm-row gap-2 mb-4" id="registerTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active rounded-pill fw-medium" id="company-tab" data-bs-toggle="tab" data-bs-target="#company-pane" type="button" role="tab" aria-selected="true">
+                                    <i class="bi bi-building me-2"></i>Şirket
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill fw-medium" id="institution-tab" data-bs-toggle="tab" data-bs-target="#institution-pane" type="button" role="tab" aria-selected="false">
+                                    <i class="bi bi-bank me-2"></i>Kurum
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill fw-medium" id="academician-tab" data-bs-toggle="tab" data-bs-target="#academician-pane" type="button" role="tab" aria-selected="false">
+                                    <i class="bi bi-mortarboard me-2"></i>Akademisyen
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill fw-medium" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-pane" type="button" role="tab" aria-selected="false">
+                                    <i class="bi bi-person-badge me-2"></i>Öğrenci
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content mt-4" id="registerTabContent">
+
+                            <div class="tab-pane fade show active" id="company-pane" role="tabpanel" tabindex="0">
+                                <form id="companyRegisterForm">
+                                    <div class="row gy-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Kullanıcı Adı</label>
+                                            <input type="text" name="UserName" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Bulunduğu Şehir</label>
+                                            <select name="City" class="form-select city-dropdown" required>
+                                                <option value="">Seçiniz...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şirket Adı</label>
+                                            <input type="text" name="CompanyName" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Vergi Numarası</label>
+                                            <input type="text" name="TaxNumber" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Kurumsal E-posta</label>
+                                            <input type="email" name="Email" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şirket Telefonu</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text text-muted">+90</span>
+                                                <input type="tel" name="PhoneNumber" class="form-control" placeholder="274, 444..." required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre</label>
+                                            <input type="password" name="Password" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre (Tekrar)</label>
+                                            <input type="password" name="PasswordConfirm" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-2">
+                                            <div id="companyMessage" class="fw-bold" style="display:none;"></div>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-4">
+                                            <button type="submit" class="btn btn-primary rounded-pill w-50 py-2">Şirket Olarak Kayıt Ol</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="institution-pane" role="tabpanel" tabindex="0">
+                                <form id="institutionRegisterForm">
+                                    <div class="row gy-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Kullanıcı Adı</label>
+                                            <input type="text" name="UserName" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary"> Bulunduğu Şehir</label>
+                                            <select name="City" class="form-select city-dropdown" required>
+                                                <option value="">Seçiniz...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label fw-medium text-secondary">Kurum Adı</label>
+                                            <input type="text" name="InstitutionName" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Yetkili E-posta</label>
+                                            <input type="email" name="Email" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Kurum Telefonu</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text text-muted">+90</span>
+                                                <input type="tel" name="PhoneNumber" class="form-control" placeholder="274, 444..." required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre</label>
+                                            <input type="password" name="Password" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre (Tekrar)</label>
+                                            <input type="password" name="PasswordConfirm" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-2">
+                                            <div id="institutionMessage" class="fw-bold" style="display:none;"></div>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-4">
+                                            <button type="submit" class="btn btn-primary rounded-pill w-50 py-2">Kurum Olarak Kayıt Ol</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="academician-pane" role="tabpanel" tabindex="0">
+                                <form id="academicianRegisterForm">
+                                    <div class="row gy-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Kullanıcı Adı</label>
+                                            <input type="text" name="UserName" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Telefon Numarası</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text text-muted">+90</span>
+                                                <input type="tel" name="PhoneNumber" class="form-control" placeholder="5XX XXX XX XX" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Akademik Unvan</label>
+                                            <select name="Title" class="form-select" required>
+                                                <option value="">Seçiniz...</option>
+                                                <option value="Prof. Dr.">Prof. Dr.</option>
+                                                <option value="Doç. Dr.">Doç. Dr.</option>
+                                                <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+                                                <option value="Arş. Gör.">Arş. Gör.</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Adınız ve Soyadınız</label>
+                                            <input type="text" name="FullName" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Bölüm</label>
+                                            <input type="text" name="Department" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Üniversite</label>
+                                            <select name="University" class="form-select" required>
+                                                <option value="">Seçiniz...</option>
+                                                <option value="Kütahya Dumlupınar Üniversitesi">Kütahya Dumlupınar Üniversitesi</option>
+                                                <option value="Kütahya Sağlık Bilimleri Üniversitesi">Kütahya Sağlık Bilimleri Üniversitesi</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label fw-medium text-secondary">Akademik E-posta</label>
+                                            <input type="email" name="Email" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre</label>
+                                            <input type="password" name="Password" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre (Tekrar)</label>
+                                            <input type="password" name="PasswordConfirm" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-2">
+                                            <div id="academicianMessage" class="fw-bold" style="display:none;"></div>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-4">
+                                            <button type="submit" class="btn btn-primary rounded-pill w-50 py-2">Akademisyen Olarak Kayıt Ol</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="student-pane" role="tabpanel" tabindex="0">
+                                <form id="studentRegisterForm">
+                                    <div class="row gy-3">
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Kullanıcı Adı</label>
+                                            <input type="text" id="studentUserName" name="UserName" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Adınız ve Soyadınız</label>
+                                            <input type="text" id="studentFullName" name="FullName" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Telefon Numarası</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text text-muted" id="phone-prefix">+90</span>
+                                                <input type="tel" id="studentPhone" name="PhoneNumber" class="form-control" placeholder="5XX XXX XX XX" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Üniversite</label>
+                                            <select name="University" class="form-select" required>
+                                                <option value="">Seçiniz...</option>
+                                                <option value="Kütahya Dumlupınar Üniversitesi">Kütahya Dumlupınar Üniversitesi</option>
+                                                <option value="Kütahya Sağlık Bilimleri Üniversitesi">Kütahya Sağlık Bilimleri Üniversitesi</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-medium text-secondary">Bölüm</label>
+                                            <input type="text" id="studentDepartment" name="Department" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-medium text-secondary">Öğrenci Numarası</label>
+                                            <input type="text" id="studentNumber" name="StudentNumber" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-medium text-secondary">Sınıf</label>
+                                            <input type="number" id="studentGrade" name="Grade" class="form-control" min="0" max="4" required>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label fw-medium text-secondary">Öğrenci E-posta</label>
+                                            <input type="email" id="studentEmail" name="Email" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre</label>
+                                            <input type="password" id="studentPassword" name="Password" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-medium text-secondary">Şifre (Tekrar)</label>
+                                            <input type="password" id="studentPasswordConfirm" name="PasswordConfirm" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-2">
+                                            <div id="studentMessage" class="fw-bold" style="display:none;"></div>
+                                        </div>
+
+                                        <div class="col-12 text-center mt-3">
+                                            <button type="submit" class="btn btn-primary rounded-pill w-50 py-2">Öğrenci Olarak Kayıt Ol</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <div class="text-center mt-5 pt-4 border-top">
+                            <p class="mb-0 text-secondary">Zaten bir hesabınız var mı? <a href="/Auth/Login" class="text-primary text-decoration-none fw-bold">Giriş Yapın</a></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+
+
+
+            const cities = [
+                "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
+                "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli",
+                "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari",
+                "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir",
+                "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir",
+                "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon",
+                "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale",
+                "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"
+            ];
+
+            cities.sort((a, b) => a.localeCompare(b, 'tr'));
+
+            cities.forEach(function (city) {
+                // DİKKAT: '#' yerine '.' kullandık.
+                // Bu sayede sayfada "city-dropdown" class'ına sahip kaç tane kutu varsa, hepsine aynı anda 81 ili basacak!
+                $(".city-dropdown").append('<option value="' + city + '">' + city + '</option>');
+            });
+
+
+            // Öğrenci Kayıt Formu AJAX İşlemi
+            $("#studentRegisterForm").submit(function (e) {
+                // 1. Sayfanın yenilenmesini durdur! (Veriler silinmez, sekme kaymaz)
+                e.preventDefault();
+
+                var messageBox = $("#studentMessage");
+
+                // Formdaki tüm verileri otomatik olarak JSON'a çevirip paketle
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Auth/RegisterStudent", // Controller'daki metodunun adresi
+                    data: formData,
+                    success: function (response) {
+                        messageBox.show();
+
+                        if (response.success) {
+                            // Başarılıysa yeşil mesaj göster ve formu temizle
+                            messageBox.removeClass("text-danger").addClass("text-success");
+                            messageBox.text(response.message);
+                            $("#studentRegisterForm")[0].reset();
+
+                            // İstersen 2 saniye sonra Login sayfasına yönlendirebilirsin:
+                            setTimeout(function() { window.location.href = "/Home/Index"; }, 2000);
+                        } else {
+                            // Controller'daki if'lere takıldıysa Kırmızı mesaj göster
+                            messageBox.removeClass("text-success").addClass("text-danger");
+                            messageBox.text(response.message);
+                        }
+                    },
+                    error: function () {
+                        messageBox.show().removeClass("text-success").addClass("text-danger");
+                        messageBox.text("Sunucu ile bağlantı kurulamadı.");
+                    }
+                });
+            });
+
+
+            $("#academicianRegisterForm").submit(function (e) {
+                e.preventDefault();
+
+                var messageBox = $("#academicianMessage");
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Auth/RegisterAcademician",
+                    data: formData,
+                    success: function (response) {
+                        messageBox.show();
+
+                        if (response.success) {
+                            messageBox.removeClass("text-danger").addClass("text-success");
+                            messageBox.text(response.message);
+                            $("#academicianRegisterForm")[0].reset();
+
+                            setTimeout(function () { window.location.href = "/Home/Index"; }, 2000);
+                        } else {
+
+                            messageBox.removeClass("text-success").addClass("text-danger");
+                            messageBox.text(response.message);
+                        }
+                    },
+                    error: function () {
+                        messageBox.show().removeClass("text-success").addClass("text-danger");
+                        messageBox.text("Sunucu ile bağlantı kurulamadı.");
+                    }
+                });
+            });
+
+            $("#institutionRegisterForm").submit(function (e) {
+                e.preventDefault();
+
+                var messageBox = $("#institutionMessage");
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Auth/RegisterInstitution",
+                    data: formData,
+                    success: function (response) {
+                        messageBox.show();
+
+                        if (response.success) {
+                            messageBox.removeClass("text-danger").addClass("text-success");
+                            messageBox.text(response.message);
+                            $("#institutionRegisterForm")[0].reset();
+
+                            setTimeout(function () { window.location.href = "/Home/Index"; }, 2000);
+                        } else {
+
+                            messageBox.removeClass("text-success").addClass("text-danger");
+                            messageBox.text(response.message);
+                        }
+                    },
+                    error: function () {
+                        messageBox.show().removeClass("text-success").addClass("text-danger");
+                        messageBox.text("Sunucu ile bağlantı kurulamadı.");
+                    }
+                });
+            });
+
+
+            $("#companyRegisterForm").submit(function (e) {
+                e.preventDefault();
+
+                var messageBox = $("#companyMessage");
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Auth/RegisterCompany",
+                    data: formData,
+                    success: function (response) {
+                        messageBox.show();
+
+                        if (response.success) {
+                            messageBox.removeClass("text-danger").addClass("text-success");
+                            messageBox.text(response.message);
+                            $("#companyRegisterForm")[0].reset();
+
+                            setTimeout(function () { window.location.href = "/Home/Index"; }, 2000);
+                        } else {
+
+                            messageBox.removeClass("text-success").addClass("text-danger");
+                            messageBox.text(response.message);
+                        }
+                    },
+                    error: function () {
+                        messageBox.show().removeClass("text-success").addClass("text-danger");
+                        messageBox.text("Sunucu ile bağlantı kurulamadı.");
+                    }
+                });
+            });
+
+
+
+            // Diğer formlar (Şirket, Kurum vb.) için de benzer kodları buraya ekleyebilirsin...
+        });
+
+
+    </script>
+}

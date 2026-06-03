@@ -1,0 +1,111 @@
+﻿@using Teknosip.Application.Features.Listings.Models
+@using Teknosip.Domain.Entities
+@model IEnumerable<PublicListingDto>
+
+@{
+    ViewData["Title"] = "Tüm İlanlar";
+}
+
+<style>
+    .listing-card {
+        transition: 0.3s;
+        border: 1px solid rgba(71, 178, 228, 0.1);
+        cursor: pointer;
+    }
+
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(55, 81, 126, 0.1) !important;
+            border-color: rgba(71, 178, 228, 0.4);
+        }
+
+    .badge-arsha {
+        background-color: rgba(71, 178, 228, 0.1);
+        color: #47b2e4;
+    }
+
+
+</style>
+
+
+<section id="companies-header" class="section pb-0">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Kariyer Fırsatları & Projeler</h2>
+        <p>Sistemdeki tüm güncel staj, iş ve proje ilanlarını keşfedin.</p>
+    </div>
+</section>
+
+<section class="section pt-4">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-4">
+            @if (!Model.Any())
+            {
+                <div class="col-12 text-center py-5">
+                    <h5 class="text-muted">Şu an aktif bir ilan bulunmuyor.</h5>
+                </div>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+                        <div class="card w-100 shadow-sm rounded-4 overflow-hidden listing-card bg-white position-relative">
+
+                            <img src="@(item.Image ?? "/images/default-company.webp")" class="card-img-top" style="height: 160px; object-fit: cover;" alt="İlan Görseli">
+
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+
+
+
+                                    @{
+                                        string badgeClass = item.ListingType switch
+                                        {
+                                            ListingType.Job => "bg-success",
+                                            ListingType.Internship => "bg-warning text-dark",
+                                            ListingType.Project => "bg-primary",
+                                            _ => "bg-secondary"
+                                        };
+                                    }
+
+                                    <span class="badge @badgeClass px-3 py-2 rounded-pill">
+                                        @Html.DisplayFor(m => item.ListingType)
+                                    </span>
+
+
+
+
+                                    <small class="text-muted">@item.CreatedAt.ToString("dd MMM yyyy")</small>
+                                </div>
+
+                                <h5 class="fw-bold mb-3 mt-2" style="color: #37517e;">
+                                    <a asp-controller="Listings" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none stretched-link" style="color: inherit;">
+                                        @item.Title
+                                    </a>
+                                </h5>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="@(item.PublisherLogo ?? "/images/profiles/default-company.webp")" class="rounded-circle border me-2" style="width:30px; height:30px; object-fit:cover;" />
+                                    <small class="fw-medium text-muted text-truncate">@item.PublisherName</small>
+                                </div>
+
+                                <hr class="mt-auto opacity-25">
+
+                                <div class="d-flex justify-content-between align-items-center small text-muted">
+                                  
+                                    <span><i class="bi bi-tag-fill text-primary me-1"></i> @Html.DisplayFor(m => item.CategoryType)</span>
+                                  
+
+                                    @if (item.WorkType.HasValue)
+                                    {
+                                        <span><i class="bi bi-briefcase-fill text-primary me-1"></i> @Html.DisplayFor(m => item.WorkType)</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>

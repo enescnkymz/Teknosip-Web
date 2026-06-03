@@ -1,0 +1,89 @@
+﻿@using Teknosip.Application.Features.Users.Models
+@using Teknosip.Domain.Entities
+@model IEnumerable<PendingApprovalDto>
+
+@{
+    ViewData["Title"] = "Onay Bekleyen Hesaplar";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Sistem /</span> Onay Bekleyen Hesaplar</h4>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card">
+    <h5 class="card-header">Bekleyen Başvurular</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Kullanıcı Tipi</th>
+                    <th>Ad / Firma Adı</th>
+                    <th>E-Posta</th>
+                    <th>Detay (Vergi No/Şehir/Unvan)</th>
+                    <th>Başvuru Tarihi</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            <i class="bx bx-check-circle fs-3 mb-2"></i><br />
+                            Onay bekleyen hiçbir hesap bulunmuyor. Harika!
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (user.UserType == UserType.Company)
+                                {
+                                    <span class="badge bg-label-primary me-1"><i class="bx bx-building"></i> Şirket</span>
+                                }
+                                else if (user.UserType == UserType.Academician)
+                                {
+                                    <span class="badge bg-label-info me-1"><i class="bx bx-book-reader"></i> Akademisyen</span>
+                                }
+                                else if (user.UserType == UserType.Institution)
+                                {
+                                    <span class="badge bg-label-warning me-1"><i class="bx bxs-landmark"></i> Kurum</span>
+                                }
+                            </td>
+                            <td><strong>@user.DisplayName</strong></td>
+                            <td>@user.Email</td>
+                            <td>@user.DetailInfo</td>
+                            <td>@user.RequestDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>
+                                <form asp-area="Admin" asp-controller="Approvals" asp-action="Approve" method="post" class="d-inline">
+                                    <input type="hidden" name="userId" value="@user.UserId" />
+                                    <input type="hidden" name="userType" value="@user.UserType" />
+                                    <button type="submit" class="btn btn-sm btn-success rounded-pill">
+                                        <i class="bx bx-check"></i> Onayla
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

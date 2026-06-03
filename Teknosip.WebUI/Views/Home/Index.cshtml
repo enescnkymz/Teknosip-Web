@@ -1,8 +1,207 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section id="hero" class="hero section dark-background">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
+                <h1>Teknokent Üniversite-Sanayi İşbirliği Portalı</h1>
+                <p>Teknokent firmalarıyla öğrencilerimizi bir araya getiriyoruz. </p>
+                <div class="d-flex">
+                   
+                    @if (User.Identity?.IsAuthenticated != true)
+                    {
+                        <a asp-controller="Auth" asp-action="Register" class="btn-get-started">Kayıt Ol</a>
+                    }
+
+                   
+                    <a href="https://www.youtube.com/watch?v=srLyPEg_CtY"
+                       class="glightbox btn-watch-video d-flex align-items-center"
+                       style="@(User.Identity?.IsAuthenticated == true ? "margin-left: 0;" : "")">
+                        <i class="bi bi-play-circle"></i><span>Tanıtım</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="200">
+                <img src="~/themes/arsha/assets/img/hero-img.webp" class="img-fluid animated" alt="">
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- /Hero Section -->
+<!-- Clients Section -->
+<section id="clients" class="clients section light-background">
+
+    <div class="container" data-aos="zoom-in">
+
+        <div class="swiper init-swiper">
+            <script type="application/json" class="swiper-config">
+                {
+                  "loop": true,
+                  "speed": 600,
+                  "autoplay": {
+                    "delay": 5000
+                  },
+                  "slidesPerView": "auto",
+                  "pagination": {
+                    "el": ".swiper-pagination",
+                    "type": "bullets",
+                    "clickable": true
+                  },
+                  "breakpoints": {
+                    "320": {
+                      "slidesPerView": 2,
+                      "spaceBetween": 40
+                    },
+                    "480": {
+                      "slidesPerView": 3,
+                      "spaceBetween": 60
+                    },
+                    "640": {
+                      "slidesPerView": 4,
+                      "spaceBetween": 80
+                    },
+                    "992": {
+                      "slidesPerView": 5,
+                      "spaceBetween": 120
+                    },
+                    "1200": {
+                      "slidesPerView": 6,
+                      "spaceBetween": 120
+                    }
+                  }
+                }
+            </script>
+            <div class="swiper-wrapper align-items-center">
+
+
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/dpu.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/sanayi.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/osb.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/ktvso.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/kosgeb.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/teknokent.webp" class="img-fluid" alt=""></div>
+
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/dpu.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/sanayi.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/osb.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/ktvso.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/kosgeb.webp" class="img-fluid" alt=""></div>
+                <div class="swiper-slide"><img src="~/themes/arsha/assets/img/clients/teknokent.webp" class="img-fluid" alt=""></div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<!-- /Clients Section -->
+<!-- Work Process Section -->
+<section id="work-process" class="work-process section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Nasıl Çalışıyoruz?</h2>
+        <p>Teknosip ekosisteminde öğrenciler, şirketler ve akademisyenler tek bir platformda nasıl buluşuyor?</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-5">
+
+            <!-- Adım 1 -->
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="steps-item">
+                    <div class="steps-image">
+                        <img src="~/themes/arsha/assets/img/steps/steps-1.webp" alt="Step 1" class="img-fluid" loading="lazy">
+                    </div>
+                    <div class="steps-content">
+                        <div class="steps-number">01</div>
+                        <h3>Kayıt ve Doğrulama</h3>
+                        <p>Sistemimize kendi rolünüze uygun olarak katılın. Öğrenciler yeteneklerini sergilerken, şirketler ve kurumlar admin onayından geçerek güvenilir bir ağın parçası olur.</p>
+                        <div class="steps-features">
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Rol Bazlı Kayıt (Öğrenci, Şirket vb.)</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Güvenli Onay Mekanizması</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Detaylı Profil Oluşturma</span>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Steps Item -->
+            </div>
+
+            <!-- Adım 2 -->
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="steps-item">
+                    <div class="steps-image">
+                        <img src="~/themes/arsha/assets/img/steps/steps-2.webp" alt="Step 2" class="img-fluid" loading="lazy">
+                    </div>
+                    <div class="steps-content">
+                        <div class="steps-number">02</div>
+                        <h3>İlanlar ve Eşleşme</h3>
+                        <p>Şirketler aradıkları niteliklere uygun staj ve iş ilanlarını yayınlar. Öğrenciler bu ilanları inceler ve tek tıkla hedefledikleri kariyer fırsatlarına başvurur.</p>
+                        <div class="steps-features">
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Kapsamlı İlan Filtreleme</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Hızlı ve Kolay Başvuru</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Akademisyen Gözetimi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Steps Item -->
+            </div>
+
+            <!-- Adım 3 -->
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="steps-item">
+                    <div class="steps-image">
+                        <img src="~/themes/arsha/assets/img/steps/steps-3.webp" alt="Step 3" class="img-fluid" loading="lazy">
+                    </div>
+                    <div class="steps-content">
+                        <div class="steps-number">03</div>
+                        <h3>Değerlendirme ve Başlangıç</h3>
+                        <p>Başvurular şirketler tarafından titizlikle incelenir. Kabul edilen öğrenciler için staj veya iş süreci, sistem üzerinden resmi ve şeffaf bir şekilde başlatılır.</p>
+                        <div class="steps-features">
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Şeffaf Süreç Takibi</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Anlık Bildirimler</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Kariyer Yolculuğu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Steps Item -->
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- /Work Process Section -->

@@ -9,13 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{9B38A2E6-EEFB-4CEA-AEB2-EA6AAD4C1624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teknosip.Domain", "Teknosip.Domain\Teknosip.Domain.csproj", "{2E1719B9-E59A-46EC-B797-8641CB81C859}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teknosip.Domain", "Teknosip.Domain\Teknosip.Domain.csproj", "{2E1719B9-E59A-46EC-B797-8641CB81C859}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teknosip.Application", "Teknosip.Application\Teknosip.Application.csproj", "{3AAB9150-8914-433F-872B-ED3FAB1FD25B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teknosip.Application", "Teknosip.Application\Teknosip.Application.csproj", "{3AAB9150-8914-433F-872B-ED3FAB1FD25B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teknosip.WebUI", "Teknosip.WebUI\Teknosip.WebUI.csproj", "{DF59AA02-E952-4AE0-B5A3-AB2010EA7F61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teknosip.WebUI", "Teknosip.WebUI\Teknosip.WebUI.csproj", "{DF59AA02-E952-4AE0-B5A3-AB2010EA7F61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teknosip.Persistence", "Teknosip.Persistence\Teknosip.Persistence.csproj", "{823AB244-459D-4666-AB16-8E500490DBA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teknosip.Persistence", "Teknosip.Persistence\Teknosip.Persistence.csproj", "{823AB244-459D-4666-AB16-8E500490DBA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teknosip.Infrastructure", "Teknosip.Infrastructure\Teknosip.Infrastructure.csproj", "{828F8CF6-B842-4C83-8EB6-4FC34C179C00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{823AB244-459D-4666-AB16-8E500490DBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{823AB244-459D-4666-AB16-8E500490DBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{823AB244-459D-4666-AB16-8E500490DBA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{828F8CF6-B842-4C83-8EB6-4FC34C179C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{828F8CF6-B842-4C83-8EB6-4FC34C179C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{828F8CF6-B842-4C83-8EB6-4FC34C179C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{828F8CF6-B842-4C83-8EB6-4FC34C179C00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{3AAB9150-8914-433F-872B-ED3FAB1FD25B} = {A287E5D9-EA0A-4427-B714-AA6667DF00A4}
 		{DF59AA02-E952-4AE0-B5A3-AB2010EA7F61} = {9B38A2E6-EEFB-4CEA-AEB2-EA6AAD4C1624}
 		{823AB244-459D-4666-AB16-8E500490DBA2} = {F7848585-8882-48C9-8BF3-61C84612814A}
+		{828F8CF6-B842-4C83-8EB6-4FC34C179C00} = {F7848585-8882-48C9-8BF3-61C84612814A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B665C433-054B-4F9C-BABF-1433131A275C}

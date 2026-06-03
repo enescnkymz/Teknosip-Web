@@ -1,0 +1,53 @@
+﻿@using Teknosip.Domain.Entities
+@using Teknosip.Application.Features.Notifications.Models
+@using Teknosip.WebUI.Services
+@model List<NotificationItemDto>
+
+@foreach (var item in Model)
+{
+    string bgClass = item.IsRead ? "bg-white" : "bg-lighter notification-item-unread";
+
+    string iconClass = "bx bx-bell";
+    string colorStyle = "background:rgba(105,108,255,.12); color:#696cff;";
+
+    if (item.Type == NotificationType.Success) { iconClass = "bx bx-check-circle"; colorStyle = "background:rgba(113,221,55,.12); color:#71dd37;"; }
+    else if (item.Type == NotificationType.Warning) { iconClass = "bx bx-error"; colorStyle = "background:rgba(255,171,0,.12); color:#ffab00;"; }
+    else if (item.Type == NotificationType.Message) { iconClass = "bx bx-message-rounded-dots"; colorStyle = "background:rgba(3,195,236,.12); color:#03c3ec;"; }
+
+    <a href="@(string.IsNullOrEmpty(item.RedirectUrl) ? "javascript:void(0);" : item.RedirectUrl)"
+       class="list-group-item list-group-item-action d-flex align-items-center p-3 @bgClass"
+       style="border-bottom: 1px solid #f0f2f4; transition: all 0.2s ease-in-out;">
+
+        <div class="avatar me-3 flex-shrink-0">
+            <span class="avatar-initial rounded-circle" style="@colorStyle">
+                <i class="@iconClass fs-5"></i>
+            </span>
+        </div>
+
+        <div class="flex-grow-1 overflow-hidden pe-3">
+            <h6 class="mb-1 fw-bold text-truncate" style="color: #435971; font-size: 0.95rem;">@item.Title</h6>
+            <p class="mb-0 text-truncate" style="font-size: 0.875rem; color: #697a8d;">
+                @item.Message
+            </p>
+        </div>
+
+        <div class="flex-shrink-0 d-flex align-items-center gap-3">
+            <small class="text-muted text-nowrap">
+                <i class="bx bx-time-five me-1"></i>@DateTimeExtensions.ToTimeAgo(item.CreatedAt)
+            </small>
+
+            <button type="button"
+                    onclick="event.preventDefault(); toggleNotificationReadStatus(@item.Id, this)"
+                    class="btn btn-sm btn-icon btn-text-secondary rounded-circle border-0 bg-transparent p-0"
+                    style="width: auto; height: auto;">
+                <i class="bx @(item.IsRead ? "bx-envelope" : "bx-envelope-open") fs-5"
+                   style="color: #a1acb8;"
+                   title="@(item.IsRead ? "Okunmadı İşaretle" : "Okundu İşaretle")"></i>
+            </button>
+
+            <span class="unread-dot rounded-circle flex-shrink-0"
+                  style="width: 8px; height: 8px; background-color: #696cff; @(item.IsRead ? "display:none;" : "")">
+            </span>
+        </div>
+    </a>
+}

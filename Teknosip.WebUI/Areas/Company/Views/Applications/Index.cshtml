@@ -1,0 +1,241 @@
+﻿@using Teknosip.Application.Features.Applications.Models
+@using Teknosip.Domain.Entities
+@model IEnumerable<CompanyApplicationDto>
+
+@{
+    ViewData["Title"] = "İlan Başvuruları";
+}
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">İlan Yönetimi /</span> Gelen Başvurular
+</h4>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            @if (!string.IsNullOrEmpty(ViewBag.ProjectTitle as string))
+            {
+                <span class="text-primary fw-bold">@ViewBag.ProjectTitle</span>
+                <span class="text-muted fs-6"> - Başvuru Listesi</span>
+            }
+            else
+            {
+                <span>Aday Listesi</span>
+            }
+        </h5>
+        <a href="/Company/Listing" class="btn btn-sm btn-outline-secondary">
+            <i class="bx bx-arrow-back me-1"></i> İlanlara Dön
+        </a>
+    </div>
+
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Aday Bilgisi</th>
+                    <th>Başvuru Tarihi</th>
+                    <th class="text-center">Ön Yazı</th>
+                    <th>Durum</th>
+                    <th class="text-center">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bx bx-user-x fs-1 mb-3"></i><br />
+                            Bu ilana henüz başvuru yapılmamış.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var app in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-sm me-3">
+                                        <img src="@(app.StudentPhoto ?? "/images/profiles/default.webp")" alt="Avatar" class="rounded-circle" style="object-fit: cover;">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-semibold">@app.StudentName</span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span>@app.AppliedAt.ToString("dd MMM yyyy")</span><br />
+                                <small class="text-muted">@app.AppliedAt.ToString("HH:mm")</small>
+                            </td>
+
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(app.CoverLetter))
+                                {
+                                    <button type="button" class="btn btn-sm btn-label-info rounded-pill" onclick="showCoverLetter('@Html.Raw(app.CoverLetter.Replace("'", "\\'").Replace("\n", "<br>"))', '@app.StudentName')">
+                                        <i class="bx bx-file me-1"></i> Ön Yazıyı Oku
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small fst-italic">Eklenmemiş</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (app.Status == ApplicationStatus.Pending)
+                                {
+                                    <span class="badge bg-label-secondary" id="status-badge-@app.ApplicationId">Beklemede</span>
+                                }
+                                else if (app.Status == ApplicationStatus.Accepted)
+                                {
+                                    <span class="badge bg-label-success" id="status-badge-@app.ApplicationId">Kabul Edildi</span>
+                                }
+                                else if (app.Status == ApplicationStatus.Rejected)
+                                {
+                                    <span class="badge bg-label-danger" id="status-badge-@app.ApplicationId">Reddedildi</span>
+                                }
+                            </td>
+
+                            <td class="text-center">
+                                <form id="form-@app.ApplicationId">
+                                    @Html.AntiForgeryToken()
+                                </form>
+
+                                <div class="d-flex justify-content-center gap-2" id="actions-@app.ApplicationId">
+                                    @if (app.Status == ApplicationStatus.Pending)
+                                    {
+                                        <button class="btn btn-sm btn-success" onclick="evaluateApp(@app.ApplicationId, '@ApplicationStatus.Accepted', '')" data-bs-toggle="tooltip" title="Kabul Et">
+                                            <i class="bx bx-check"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="promptReject(@app.ApplicationId)" data-bs-toggle="tooltip" title="Reddet">
+                                            <i class="bx bx-x"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Değerlendirildi <br> (@app.ReviewedAt?.ToString("dd MMM"))</span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="coverLetterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalStudentName">Adayın Ön Yazısı</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="p-3 bg-lighter rounded" id="modalCoverLetterContent" style="min-height: 100px; white-space: pre-wrap;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Ön Yazı Modalını Açma
+        function showCoverLetter(content, studentName) {
+            document.getElementById('modalStudentName').innerText = studentName + " - Ön Yazı";
+            document.getElementById('modalCoverLetterContent').innerHTML = content;
+            var myModal = new bootstrap.Modal(document.getElementById('coverLetterModal'));
+            myModal.show();
+        }
+
+        // Reddetme işlemi için SweetAlert ile sebep sorma
+        function promptReject(applicationId) {
+            Swal.fire({
+                title: 'Başvuruyu Reddet',
+                text: "Adaya iletilmek üzere bir ret sebebi yazabilirsiniz (Opsiyonel):",
+                input: 'textarea',
+                inputPlaceholder: 'Örn: İlan gereksinimlerini karşılamıyorsunuz...',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d', // Sneat Danger
+                cancelButtonColor: '#8592a3',  // Sneat Secondary
+                confirmButtonText: 'Reddet',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    evaluateApp(applicationId, '@ApplicationStatus.Rejected', result.value);
+                }
+            });
+        }
+
+        // Kabul/Ret AJAX İsteği
+        function evaluateApp(applicationId, status, reason) {
+
+            // Eğer kabul işlemiyse onay alalım
+            if (status === '@ApplicationStatus.Accepted') {
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu adayın başvurusunu kabul etmek üzeresiniz.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#71dd37',
+                    cancelButtonColor: '#8592a3',
+                    confirmButtonText: 'Evet, Kabul Et',
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        sendAjaxRequest(applicationId, status, reason);
+                    }
+                });
+            } else {
+                // Reddetme ise direkt gönder (sebebi zaten sorduk)
+                sendAjaxRequest(applicationId, status, reason);
+            }
+        }
+
+        // Gerçek Post Atma Metodu
+        function sendAjaxRequest(applicationId, status, reason) {
+            var token = $(`#form-${applicationId} input[name="__RequestVerificationToken"]`).val();
+
+            $.ajax({
+                url: '/Company/Applications/Evaluate',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: token,
+                    applicationId: applicationId,
+                    status: status,
+                    rejectionReason: reason
+                },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire('Başarılı!', response.message, 'success');
+
+                        // UI Güncelleme (Sayfa yenilemeden badge'i ve butonları değiştirme)
+                        var badge = $(`#status-badge-${applicationId}`);
+                        var actions = $(`#actions-${applicationId}`);
+
+                        if (status === '@ApplicationStatus.Accepted') {
+                            badge.removeClass('bg-label-secondary').addClass('bg-label-success').text('Kabul Edildi');
+                        } else {
+                            badge.removeClass('bg-label-secondary').addClass('bg-label-danger').text('Reddedildi');
+                        }
+
+                        actions.html('<span class="text-muted small">Değerlendirildi <br> (Şimdi)</span>');
+                    } else {
+                        Swal.fire('Hata!', response.message, 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Hata!', 'Sunucu ile iletişim kurulamadı.', 'error');
+                }
+            });
+        }
+    </script>
+}

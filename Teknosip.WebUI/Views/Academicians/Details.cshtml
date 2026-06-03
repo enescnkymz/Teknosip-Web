@@ -1,0 +1,102 @@
+﻿@using Teknosip.Application.Features.AcademicianProfile.Models
+@model PublicAcademicianDetailDto
+
+@{
+    ViewData["Title"] = $"{Model.Title} {Model.FullName} - Profil";
+}
+
+<style>
+    .company-header-bg {
+        background-color: #f3f5fa;
+        padding: 40px 0;
+        border-bottom: 1px solid #e1e6f1;
+    }
+</style>
+
+<section class="company-header-bg">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-1" style="color: #37517e;">@Model.Title @Model.FullName</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item"><a href="/Academicians" class="text-decoration-none">Akademisyenler</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Detay</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="section py-5">
+    <div class="container">
+        <div class="row gy-5">
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
+                    <img src="@(Model.ProfilePhoto ?? "/images/profiles/default.webp")"
+                         class="rounded-circle border shadow-sm mx-auto mb-3 p-1"
+                         style="width: 150px; height: 150px; object-fit: cover;"
+                         alt="@Model.FullName" />
+
+                    <h4 class="fw-bold mb-1" style="color: #37517e;">@Model.Title @Model.FullName</h4>
+                    <p class="text-muted small mb-4"><i class="bi bi-bank text-primary me-1"></i> @Model.University</p>
+
+                    <hr class="mb-4 opacity-25" />
+
+                    <ul class="list-group list-group-flush text-start small">
+                        <li class="list-group-item px-0 border-0 mb-2">
+                            <span class="text-muted d-block fw-semibold mb-1">E-Posta Adresi</span>
+                            <a href="mailto:@Model.Email" class="text-decoration-none" style="color: #47b2e4;">
+                                <i class="bi bi-envelope-fill me-2"></i>@Model.Email
+                            </a>
+                        </li>
+
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <li class="list-group-item px-0 border-0 mb-2">
+                                <span class="text-muted d-block fw-semibold mb-1">Telefon Numarası</span>
+                                <a href="tel:@Model.PhoneNumber" class="text-decoration-none text-dark">
+                                    <i class="bi bi-telephone-fill text-primary me-2"></i>@Model.PhoneNumber
+                                </a>
+                            </li>
+                        }
+
+                        <li class="list-group-item px-0 border-0">
+                            <span class="text-muted d-block fw-semibold mb-1">Katılım Tarihi</span>
+                            <span class="text-dark"><i class="bi bi-calendar-check-fill text-primary me-2"></i>@Model.JoinedAt.ToString("MMM yyyy")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 p-5 h-100">
+
+                    <div class="mb-4">
+                        <div class="d-inline-block badge bg-light text-dark px-3 py-2 border rounded-pill fs-6 fw-normal">
+                            <i class="bi bi-book me-2 text-primary"></i> @Model.Department
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mb-3 pb-2" style="color: #37517e; border-bottom: 2px solid #f3f5fa;">
+                        Hakkında / Uzmanlık Alanı
+                    </h5>
+
+                    <div class="text-muted" style="line-height: 1.8; white-space: pre-wrap;">
+                        @if (!string.IsNullOrEmpty(Model.About))
+                        {
+                            @Model.About
+                        }
+                        else
+                        {
+                            <span class="fst-italic">Bu akademisyen henüz biyografi veya uzmanlık alanı bilgisini sisteme eklememiştir.</span>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

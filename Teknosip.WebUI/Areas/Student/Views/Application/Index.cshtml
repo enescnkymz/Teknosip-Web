@@ -1,0 +1,135 @@
+﻿@using Teknosip.Application.Features.Applications.Models
+@using Teknosip.Domain.Entities
+@model IEnumerable<StudentApplicationDto>
+
+@{
+    ViewData["Title"] = "Başvurularım";
+}
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Kariyer /</span> Başvurularım
+</h4>
+
+<div class="card">
+    <h5 class="card-header border-bottom mb-3"><i class="bx bx-file-blank text-primary me-2"></i> İlan Başvurularım</h5>
+
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>İlan Bilgisi</th>
+                    <th>İlan Tipi</th>
+                    <th>Başvuru Tarihi</th>
+                    <th>Değerlendirme Tarihi</th>
+                    <th>Durum</th>
+                    <th class="text-center">İşlem</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bx bx-folder-open fs-1 mb-3"></i><br />
+                            Henüz hiçbir ilana başvuru yapmamışsınız.<br />
+                            <a href="/Listings" class="btn btn-sm btn-primary mt-3">İlanlara Göz At</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var app in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold text-dark" style="font-size: 0.95rem;">@app.ProjectTitle</span>
+                                    <small class="text-muted"><i class="bx bx-building-house me-1"></i> @app.PublisherName</small>
+                                </div>
+                            </td>
+
+                            <td>
+                                @if (app.ListingType == ListingType.Job)
+                                {<span class="badge" style="background-color: #00C68D !important; ">İş İlanı</span> }
+                                else if (app.ListingType == ListingType.Internship)
+                                { <span class="badge text-dark" style="background-color: #FFD400 !important; ">Staj</span>}
+                                else
+                                { <span class="badge text-white" style="background-color: #0055DA !important; " >Proje</span>}
+                            </td>
+
+                            <td>
+                                <span>@app.AppliedAt.ToString("dd MMM yyyy")</span><br />
+                                <small class="text-muted">@app.AppliedAt.ToString("HH:mm")</small>
+                            </td>
+
+                            <td>
+                                @if (app.ReviewedAt.HasValue)
+                                {
+                                    <span>@app.ReviewedAt.Value.ToString("dd MMM yyyy")</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">Bekleniyor...</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (app.Status == ApplicationStatus.Pending)
+                                {
+                                    <span class="badge bg-label-info"><i class="bx bx-time me-1"></i> Beklemede</span>
+                                }
+                                else if (app.Status == ApplicationStatus.Accepted)
+                                {
+                                    <span class="badge bg-label-success"><i class="bx bx-check-circle me-1"></i> Kabul Edildi</span>
+                                }
+                                else if (app.Status == ApplicationStatus.Rejected)
+                                {
+                                    <span class="badge bg-label-danger"><i class="bx bx-x-circle me-1"></i> Reddedildi</span>
+                                }
+                            </td>
+
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="/Listings/Details/@app.ProjectId" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="İlanı Görüntüle">
+                                        <i class="bx bx-link-external"></i>
+                                    </a>
+
+                                    @if (app.Status == ApplicationStatus.Rejected && !string.IsNullOrEmpty(app.RejectionReason))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Ret Sebebini Gör" onclick="showRejectionReason('@Html.Raw(app.RejectionReason.Replace("'", "\\'"))')">
+                                            <i class="bx bx-message-alt-error"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Tooltipleri aktifleştirme (Sneat teması için gereklidir)
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl)
+        {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        
+        function showRejectionReason(reason) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Değerlendirme Notu',
+                text: reason,
+                confirmButtonColor: '#696cff', 
+                confirmButtonText: 'Kapat'
+            });
+        }
+    </script>
+}
+

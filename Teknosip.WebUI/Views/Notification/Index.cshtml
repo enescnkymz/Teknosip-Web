@@ -1,0 +1,139 @@
+﻿@using Teknosip.WebUI.Services
+@using Teknosip.Domain.Entities
+@using Teknosip.Application.Features.Notifications.Models
+@model List<NotificationItemDto>
+
+@{
+    ViewData["Title"] = "Tüm Bildirimlerim";
+    Layout = ViewBag.LayoutPath ?? "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">İletişim /</span> Bildirimler
+</h4>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom pb-3">
+        <h5 class="mb-0 fw-semibold text-dark">Bildirim Geçmişiniz</h5>
+        <button onclick="markAllNotificationsAsRead()" class="btn btn-sm btn-primary"> 
+            <i class="bx bx-check-double me-1"></i> Tümünü Okundu İşaretle
+        </button>
+    </div>
+
+    <div class="card-body p-0">
+        <div id="notification-list" class="list-group list-group-flush">
+            @if (Model != null && Model.Any())
+            {
+                <partial name="~/Views/Shared/Partials/_NotificationItemsPartial.cshtml" model="Model" />
+            }
+            else
+            {
+                <div class="text-center p-5 no-notification-box">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px; background-color: rgba(105,108,255,.08);">
+                        <i class="bx bx-bell-off" style="font-size: 2.5rem; color:#696cff;"></i>
+                    </div>
+                    <h5 class="fw-semibold text-dark mb-1">Hiç bildiriminiz yok</h5>
+                    <p class="text-muted mb-0">Yeni bir gelişme olduğunda size haber vereceğiz.</p>
+                </div>
+            }
+        </div>
+
+        @if (Model != null && Model.Count >= 10) // İlk yüklemede en az 10 veri varsa buton görünür
+        {
+            <div id="load-more-container" class="text-center py-3 border-top bg-white">
+                <button type="button" id="btn-load-more" onclick="loadMoreNotifications()" class="btn btn-sm btn-outline-primary px-4">
+                    <i class="bx bx-refresh me-1"></i> Daha Fazla Yükle
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        // Şu anki sayfayı hafızada tutuyoruz (İlk sayfa yüklendiği için 1'den başlıyor)
+        var notificationPage = 1;
+        var notificationPageSize = 10;
+
+        function loadMoreNotifications() {
+            notificationPage++; // Sayfa numarasını 1 artırıyoruz
+            var $btn = $('#btn-load-more');
+
+            // Butonu yükleniyor durumuna getiriyoruz
+            $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Yükleniyor...');
+
+            $.ajax({
+                url: '/Notification/LoadMore',
+                type: 'GET',
+                data: { page: notificationPage, pageSize: notificationPageSize },
+                success: function (htmlResult) {
+                    if (htmlResult.trim() !== "") {
+                        // Gelen HTML satırlarını listenin sonuna ekle
+                        $('#notification-list').append(htmlResult);
+
+                        // Butonu eski haline döndür
+                        $btn.prop('disabled', false).html('<i class="bx bx-refresh me-1"></i> Daha Fazla Yükle');
+                    } else {
+                        // Eğer Backend boş içerik döndüyse, yüklenecek başka veri kalmamıştır. Buton alanını tamamen gizle.
+                        $('#load-more-container').fadeOut(300);
+                    }
+                },
+                error: function () {
+                    console.error("Daha fazla bildirim yüklenirken bir hata oluştu.");
+                    $btn.prop('disabled', false).html('<i class="bx bx-refresh me-1"></i> Hata Oluştu, Tekrar Dene');
+                }
+            });
+        }
+
+        // Mevcut durum değiştirme fonksiyonun (Hiç dokunulmadı, aynen duruyor)
+        function toggleNotificationReadStatus(notificationId, element) {
+            var $item = $(element).closest('.list-group-item');
+            var isCurrentlyRead = !$item.hasClass('notification-item-unread');
+            var willBeRead = !isCurrentlyRead;
+
+            $.ajax({
+                url: '/Notification/ChangeReadStatus',
+                type: 'POST',
+                data: { id: notificationId, markAsRead: willBeRead },
+                success: function (data) {
+                    if (data.success) {
+                        var $icon = $(element).find('i');
+                        var $dot = $item.find('.unread-dot');
+
+                        var $mainBadge = $('#unread-badge-main');
+                        var $headerBadge = $('#unread-badge-header');
+
+                        var currentText = $mainBadge.text().replace('Yeni', '').trim();
+                        var currentCount = parseInt(currentText) || 0;
+
+                        if (willBeRead) {
+                            $item.removeClass('notification-item-unread bg-lighter').css('background', 'transparent');
+                            $dot.hide();
+                            $icon.removeClass('bx-envelope-open').addClass('bx-envelope').attr('title', 'Okunmadı İşaretle');
+                            currentCount = Math.max(0, currentCount - 1);
+                        } else {
+                            $item.addClass('notification-item-unread bg-lighter').css('background', '');
+                            $dot.show();
+                            $icon.removeClass('bx-envelope').addClass('bx-envelope-open').attr('title', 'Okundu İşaretle');
+                            currentCount++;
+                        }
+
+                        $mainBadge.text(currentCount);
+                        $headerBadge.text(currentCount + ' Yeni');
+
+                        if (currentCount > 0) {
+                            $mainBadge.show();
+                            $headerBadge.show();
+                        } else {
+                            $mainBadge.hide();
+                            $headerBadge.hide();
+                        }
+                    }
+                },
+                error: function () {
+                    console.error("Bildirim durumu güncellenirken bir hata oluştu.");
+                }
+            });
+        }
+    </script>
+}
